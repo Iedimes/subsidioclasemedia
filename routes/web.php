@@ -21,6 +21,7 @@ Route::get('/{key}', 'App\Http\Controllers\Admin\HomeController@index');
 //Route::get('/{id}', 'App\Http\Controllers\Admin\HomeController@index');
 //Route::get('/{pin}', 'App\Http\Controllers\Admin\HomeController@index');
 
+
 /* Auto-generated admin routes */
 Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->group(static function () {
     Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->name('admin/')->group(static function () {
@@ -128,6 +129,10 @@ Route::middleware(['auth:' . config('admin-auth.defaults.guard'), 'admin'])->gro
             Route::get('/{state_id}/cities',                            'ApplicationsController@cities')->name('cities');
             Route::get('/{task}/{workflowState}/transition',            'ApplicationsController@transition');
             Route::get('/{task}/pdf',                                   'ApplicationsController@getPdf');
+            Route::get('/{task}/pdfc',                                  'ApplicationsController@getPdfc');
+            // Route::get('/{application}/crear',                          'ApplicationsController@crear')->name('crear');
+            //Route::get('/guardar',                                     'ApplicationsController@guardar')->name('guardar');
+            // Route::get('/{application}/showD',                          'ApplicationsController@showD');
             /*Route::post('/bulk-destroy',                                'ProjectController@bulkDestroy')->name('bulk-destroy');
             Route::post('/{visit}',                                     'ProjectController@update')->name('update');
             Route::delete('/{visit}',                                   'ProjectController@destroy')->name('destroy');*/

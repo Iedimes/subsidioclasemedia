@@ -34,6 +34,7 @@ use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF;
 use Carbon\Carbon;
+//use Illuminate\Http\Request;
 
 class ApplicationsController extends Controller
 {
@@ -52,7 +53,8 @@ class ApplicationsController extends Controller
             ->modifyQuery(function ($query) use ($request) {
 
                 $query->where('NroExpS', 'A');
-                $query->where('TexCod', 188);
+                $query->whereIn('TexCod', [188,201] );
+
                 if ($request->search) {
 
                     $query->where(function ($query) use ($request) {
@@ -60,7 +62,7 @@ class ApplicationsController extends Controller
                               ->orWhere('NroExp', $request->search);
                     })->where(function ($query) {
                         $query->where('NroExpS', 'A');
-                        $query->where('TexCod', 188);
+                        $query->whereIn('TexCod', [188,201] );
                     });
                     //return 'funciona';
 
@@ -134,6 +136,25 @@ class ApplicationsController extends Controller
         return view('admin.applications.show', compact('application', 'sol', 'historial', 'navegacion'));
     }
 
+    public function showD(Application $application)
+    {
+        //return $application;
+        $sol = Task::where('NroExp', $application->NroExp)->first();
+        if ($sol) {
+            $historial = ApplicationStatus::where('task_id', $sol->id)->orderBy('created_at')->get();
+            $navegacion = WorkflowNavigation::where('workflow_state_id', $sol->status->status->id)->get();
+        } else {
+            $historial = [];
+            $navegacion = [];
+        }
+
+        //return $sol;
+
+        //return $navegacion;
+        //->where('NroExpS', 'A');
+        return view('admin.applications.showD', compact('application', 'sol', 'historial', 'navegacion'));
+    }
+
     public function create(Application $application)
     {
         //$this->authorize('admin.task.create');
@@ -144,6 +165,18 @@ class ApplicationsController extends Controller
         $category = Category::all();
         return view('admin.task.create', compact('application', 'workflow', 'application', 'state', 'city', 'category'));
     }
+
+    // public function crear(Application $application)
+    // {
+    //     //$this->authorize('admin.task.create');
+    //     $usuario = Auth::user()->id;
+    //     $nodep = [18, 19, 20, 999];
+    //     $state = State::whereNotIn('DptoId', $nodep)->orderBy('DptoNom')->get();
+    //     $city = City::all();
+    //     $workflow = Workflow::all();
+    //     $category = Category::all();
+    //     return view('admin.task.crear', compact('application', 'workflow', 'application', 'state', 'city', 'category', 'usuario'));
+    // }
 
     public function cities($dptoid)
     {
@@ -177,8 +210,32 @@ class ApplicationsController extends Controller
         return $pdf->download('constancia.pdf');
     }
 
+    public function getPdfc(Task $task)
+    {
+
+        //$date = Carbon::now();
+        //return $date->formatLocalized('%B'); //nombre del mes actual
+        setlocale(LC_ALL,'es_ES.UTF-8');
+        setlocale(LC_TIME,'es_ES');
+        \Carbon\Carbon::setLocale('es_ES');
+        $codigoQr = QrCode::size(150)->generate(env('APP_URL') . '/' . $task->certificate_pin);
+        $pdf = PDF::loadView(
+            'vista_pdfC',
+            [
+                'valor' => $codigoQr,
+                'task' => $task
+            ]
+        );
+        return $pdf->download('constancia.pdf');
+    }
+
+
+
+
+
     public function store(StoreTask $request)
     {
+        //return "Store";
         // Sanitize input
         $sanitized = $request->getSanitized();
         $sanitized['state_id'] = $request->getStateId();
@@ -192,7 +249,62 @@ class ApplicationsController extends Controller
         }
         $sanitized['certificate_pin'] = $key;
 
+        //return $sanitized;
+        if($request->getWorkFlowId()==6){
+            //return "Igual a 6";
+            $task = Task::create($sanitized);
 
+            $status = new ApplicationStatus;
+            $status->task_id = $task->id;
+            $status->status_id = 30;
+            $status->user_id = Auth::user()->id;
+            $status->description = 'Creación de Solicitud';
+            $status->save();
+        }else{
+            //return "Igual a 1";
+        // Store the Task
+
+        $task = Task::create($sanitized);
+
+        $status = new ApplicationStatus;
+        $status->task_id = $task->id;
+        $status->status_id = 1;
+        $status->user_id = Auth::user()->id;
+        $status->description = 'Creación de Solicitud';
+        $status->save();
+        }
+
+        if ($request->ajax()) {
+            return ['redirect' => url('admin/applications/' . $sanitized['NroExp'] . '/show'), 'message' => trans('brackets/admin-ui::admin.operation.succeeded')];
+        }
+
+        return redirect('admin/tasks');
+    }
+
+
+    public function guardar(StoreTask $request)
+    {
+        //return $login = auth()->id();
+        $request;
+        //return "Guardar";
+        // Sanitize input
+        //return $login = auth()->id();
+        //return Auth::user()->id;
+
+        $sanitized = $request->getSanitized();
+        $sanitized['state_id'] = $request->getStateId();
+        $sanitized['city_id'] = $request->getCityId();
+        $sanitized['workflow_id'] = $request->getWorkFlowId();
+        $sanitized['category_id'] = $request->getGetCategoryId();
+
+        $key = str_random(25);
+        while (Task::where('certificate_pin', $key)->exists()) {
+            $key = str_random(25);
+        }
+        $sanitized['certificate_pin'] = $key;
+
+        $login = auth()->id();
+        //$usuario = 12;
 
         //return $sanitized;
         // Store the Task
@@ -200,8 +312,8 @@ class ApplicationsController extends Controller
 
         $status = new ApplicationStatus;
         $status->task_id = $task->id;
-        $status->status_id = 1;
-        $status->user_id = Auth::user()->id;
+        $status->status_id = 30;
+        $status->user_id = $login;
         $status->description = 'Creación de Solicitud';
         $status->save();
 

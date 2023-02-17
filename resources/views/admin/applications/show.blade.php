@@ -77,6 +77,14 @@
             </div>
         @endif
 
+        @if ($sol->status->status->id == 34 || $sol->status->status->id == 34 || $sol->status->status->id == 35 || $sol->status->status->id == 36 || $sol->status->status->id == 37)
+        <div class="row">
+             <div class="form-group col-sm-4">
+                 <p class="card-text"><a href="{{ url('admin/applications/'.$sol->id.'/pdfc') }}" class="btn btn-block btn-square btn-lg text-white bg-danger"><i class="fa fa-file-pdf-o"></i> Imprimir Certificado</a></p>
+             </div>
+         </div>
+     @endif
+
     </div>
   </div>
 
@@ -146,6 +154,11 @@
 
     <div class="card-body">
         <a href="{{ url('admin/applications/'.$application->NroExp.'/create') }}" class="btn btn-block btn-square btn-lg bg-primary"><i class="fa fa-plus"></i><strong> Procesar Solicitud</strong></a>
+        {{-- @if( $application->TexCod == 188)
+         <a href="{{ url('admin/applications/'.$application->NroExp.'/create') }}" class="btn btn-block btn-square btn-lg bg-primary"><i class="fa fa-plus"></i><strong> Procesar Solicitud</strong></a>
+        @else
+         <a href="{{ url('admin/applications/'.$application->NroExp.'/crear') }}" class="btn btn-block btn-square btn-lg bg-primary"><i class="fa fa-plus"></i><strong> Procesar Solicitud Cuando es 201</strong></a>
+        @endif --}}
     </div>
   </div>
 
