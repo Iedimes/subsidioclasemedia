@@ -83,13 +83,13 @@
 
 
         @if ($task->name_couple)
-             y nombre de otro/a beneficiario/a <strong> {{ strtoupper($task->name_couple.' '.$task->last_name_couple) }} </strong>  con C.I.C N° <strong> {{ number_format((int)$task->government_id_couple,0,".",".") }} </strong>, respectivamente
+             y nombre de otro/a beneficiario/a <strong> {{ strtoupper($task->name_couple.' '.$task->last_name_couple) }} </strong>  con C.I.C N° <strong> {{ number_format((int)$task->government_id_couple,0,".",".")  }} </strong>, respectivamente
         @endif
         , en el marco de la Ley N° 5638/16, sus decretos y sus reglamentaciones.
     </p>
     <p>
-        El Aporte Estatal otorgado corresponde a la Categoría <strong> {{ $task->category->name }} </strong>, el cual asciende a la suma de Gs <strong> {{ number_format((int)(($task->amount * $task->category->percentage) / 100),0,".",".")  }} </strong>, equivalente al
-       <strong> {{$task->category->percentage}} % </strong> de monto total del proyecto constructivo recibido en relación al inmueble individualizado como
+        El Aporte Estatal otorgado corresponde a la Categoría <strong> {{ $task->category->name }} </strong>, el cual asciende a la suma de Gs <strong> {{ number_format((int)(($task->amount * $task->category->percentage) / 100),0,".",".") }}, (cincuenta millones ochocientos cincuenta mil guaranies)  </strong>, equivalente al
+       <strong> {{$task->category->percentage}} % (veinte por ciento)</strong> del monto total del proyecto constructivo recibido en relación al inmueble individualizado como
        @if ($task->farm)
        Finca o Matrícula N° <strong> {{ $task->farm }} </strong>
        @endif
