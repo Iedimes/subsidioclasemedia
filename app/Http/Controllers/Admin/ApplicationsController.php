@@ -34,6 +34,7 @@ use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF;
 use Carbon\Carbon;
+use NumerosEnLetras;
 //use Illuminate\Http\Request;
 
 class ApplicationsController extends Controller
@@ -77,6 +78,8 @@ class ApplicationsController extends Controller
             })
             //->paginate(15)
             ->get(['NroExp', 'NroExpsol', 'NroExpFch', 'NroExpPer', 'NUsuCod', 'NUsuNombre']);
+            // $x=NumerosEnLetras::convertir(1988208.99);
+            // return $x;
 
         //  return $request;
 

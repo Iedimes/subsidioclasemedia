@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('brackets/admin-auth::admin.auth.login');
 });
 
 Route::get('/{key}', 'App\Http\Controllers\Admin\HomeController@index');
