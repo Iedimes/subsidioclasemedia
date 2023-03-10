@@ -14,8 +14,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "owen-it/laravel-auditing": "^13.0",
-        "simplesoftwareio/simple-qrcode": "~4",
-        "villca/numeros-en-letras": "^1.2"
+        "simplesoftwareio/simple-qrcode": "~4"
     },
     "require-dev": {
         "brackets/admin-generator": "^6.1",
