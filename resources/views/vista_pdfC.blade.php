@@ -89,8 +89,8 @@
         @endif, en el marco de la Ley N° 5638/16, sus decretos y sus reglamentaciones.
     </p>
     <p class="par">
-        El Aporte Estatal otorgado corresponde a la Categoría <strong> {{ $task->category->name }} </strong>, el cual asciende a la suma de Gs <strong> {{ number_format((int)(($task->amount * $task->category->percentage) / 100),0,".",".") }}, ({{NumerosEnLetras::convertir((int)(($task->amount * $task->category->percentage) / 100))}})  </strong>, equivalente al
-       <strong> {{$task->category->percentage}} % ({{NumerosEnLetras::convertir($task->category->percentage)}} por ciento)</strong> del monto total del proyecto constructivo recibido en relación al inmueble individualizado como
+        El Aporte Estatal otorgado corresponde a la Categoría <strong> {{ $task->category->name }} </strong>, el cual asciende a la suma de Gs <strong> {{ number_format((int)(($task->amount * $task->category->percentage) / 100),0,".",".") }}, ({{ strtolower($monto) }})  </strong>, equivalente al
+       <strong> {{$task->category->percentage}} % ({{ strtolower($porcentaje) }} por ciento)</strong> del monto total del proyecto constructivo recibido en relación al inmueble individualizado como
        @if ($task->farm)
        Finca o Matrícula N° <strong> {{ $task->farm }} </strong>
        @endif
